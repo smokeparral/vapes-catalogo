@@ -1,6 +1,7 @@
 // Genera el sitio en _site/ a partir de la hoja de Google Sheets (o de los datos de ejemplo).
 // Uso: node scripts/build.mjs
 import { createHash } from 'node:crypto';
+import { existsSync } from 'node:fs';
 import { access, copyFile, cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -99,6 +100,9 @@ function fuenteFoto(v) {
   const drive = /\/d\/([\w-]{20,})/.exec(v)?.[1] ?? /[?&]id=([\w-]{20,})/.exec(v)?.[1];
   if (drive) return { tipo: 'drive', id: drive, clave: `drive-${drive}` };
   if (/^https?:\/\//i.test(v)) return { tipo: 'url', url: v, clave: `url-${hash(v)}` };
+  // Fotos guardadas en la carpeta Productos/ del repositorio: basta con el nombre del archivo.
+  const enCarpeta = path.join(RAIZ, 'Productos', path.basename(v));
+  if (existsSync(enCarpeta)) return { tipo: 'local', ruta: enCarpeta };
   if (USAR_EJEMPLO) return { tipo: 'local', ruta: path.join(RAIZ, 'datos', v) };
   return null;
 }
@@ -148,7 +152,7 @@ function normalizar(filas) {
 
     const fotos = String(f.fotos ?? '').split(/[\s,]+/).filter(Boolean).map(v => {
       const fuente = fuenteFoto(v);
-      if (!fuente) avisos.push(`"${nombre}": "${v}" no parece un link de Google Drive.`);
+      if (!fuente) avisos.push(`"${nombre}": "${v}" no es un link de Google Drive ni una foto de la carpeta Productos.`);
       return fuente;
     }).filter(Boolean);
     if (!fotos.length) avisos.push(`"${nombre}": no tiene fotos, se usa la imagen genérica.`);
