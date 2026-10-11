@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es" data-base="{{base}}">
+<head>
+{{cabeza}}
+{{scripts}}
+  <script type="module" src="{{base}}js/edad.js"></script>
+</head>
+<body class="{{claseBody}}">
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+  <header class="cabecera">
+    <div class="cabecera__fila">
+      {{marca}}
+      <a class="cabecera__volver" href="{{base}}">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4l-6 6 6 6"/></svg>
+        Catálogo
+      </a>
+    </div>
+  </header>
+
+  <main id="contenido">
+{{contenido}}
+  </main>
+
+{{pie}}
+</body>
+</html>

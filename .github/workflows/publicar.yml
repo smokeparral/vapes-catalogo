@@ -1,0 +1,52 @@
+name: Publicar catálogo
+
+on:
+  workflow_dispatch: {}            # botón "Catálogo > Publicar cambios" de la hoja
+  push:
+    branches: [main]               # cambios de código
+  schedule:
+    - cron: '17 * * * *'           # red de seguridad: cada hora
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Recuperar fotos ya procesadas
+        uses: actions/cache@v4
+        with:
+          path: .cache/fotos
+          key: fotos-${{ github.run_id }}
+          restore-keys: fotos-
+
+      - name: Generar sitio
+        run: node scripts/build.mjs
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: despliegue
+        uses: actions/deploy-pages@v4

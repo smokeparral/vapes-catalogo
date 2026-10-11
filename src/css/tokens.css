@@ -1,0 +1,73 @@
+:root {
+  color-scheme: light dark;
+
+  /* Niebla del valle + maqui */
+  --fondo: #eef0ec;
+  --superficie: #fbfcfa;
+  --foto: #e2e6df;
+  --tinta: #142120;
+  --tinta-2: #55625e;
+  --borde: #d6dcd4;
+  --borde-fuerte: #b7c0b6;
+  --acento: #6b2850;
+  --acento-tinta: #ffffff;
+  --aviso: #6b2850;
+  --exito: #2b7a4b;
+  --vidrio: rgb(238 240 236 / 0.82);
+  --sombra-panel: 0 -8px 32px rgb(0 0 0 / 0.12);
+
+  --fuente: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --fuente-titulos: 'Bricolage Grotesque', 'Figtree', system-ui, sans-serif;
+  --texto-xs: 0.75rem;
+  --texto-s: 0.875rem;
+  --texto-m: 1rem;
+  --texto-l: 1.25rem;
+  --texto-xl: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
+
+  --espacio-1: 4px;
+  --espacio-2: 8px;
+  --espacio-3: 12px;
+  --espacio-4: 16px;
+  --espacio-5: 24px;
+  --espacio-6: 32px;
+  --espacio-7: 48px;
+  --margen: 16px;
+  --ancho-max: 1280px;
+  --alto-cabecera: 60px;
+
+  --radio-s: 8px;
+  --radio-m: 12px;
+  --radio-l: 20px;
+  --radio-total: 999px;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --rapido: 150ms;
+  --medio: 200ms;
+  --lento: 300ms;
+}
+
+@media (min-width: 640px) {
+  :root { --margen: 24px; }
+}
+
+@media (min-width: 1024px) {
+  :root { --margen: 32px; --alto-cabecera: 68px; }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: #121615;
+    --superficie: #1a201e;
+    --foto: #1f2523;
+    --tinta: #e8ede8;
+    --tinta-2: #9ba7a2;
+    --borde: #29312f;
+    --borde-fuerte: #43504c;
+    --acento: #c98bb0;
+    --acento-tinta: #1f0c17;
+    --aviso: #e0a8c8;
+    --exito: #5cc48a;
+    --vidrio: rgb(18 22 21 / 0.8);
+    --sombra-panel: 0 -8px 32px rgb(0 0 0 / 0.5);
+  }
+}

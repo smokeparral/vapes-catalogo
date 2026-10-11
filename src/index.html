@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es" data-base="{{base}}">
+<head>
+{{cabeza}}
+  <script type="module" src="{{base}}js/catalogo.js"></script>
+  <script type="module" src="{{base}}js/edad.js"></script>
+</head>
+<body>
+  <a class="saltar" href="#grilla">Saltar al catálogo</a>
+
+  <header class="cabecera">
+    <div class="cabecera__fila">
+      {{marca}}
+      <form class="busqueda" role="search">
+        <svg class="busqueda__icono" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4"/></svg>
+        <input id="busqueda" type="search" placeholder="Busca sabor o marca" aria-label="Buscar productos"
+               autocomplete="off" enterkeyhint="search" spellcheck="false">
+      </form>
+      <button id="btn-filtros" class="btn-filtros" type="button" aria-haspopup="dialog" aria-controls="panel-filtros">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M8.5 15h3"/></svg>
+        <span class="sr">Filtros</span>
+        <span class="btn-filtros__n" hidden></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    {{destacados}}
+
+    <div class="catalogo">
+      <dialog id="panel-filtros" class="panel" aria-labelledby="titulo-filtros">
+        <div class="panel__cabecera">
+          <span class="panel__asa" aria-hidden="true"></span>
+          <h2 id="titulo-filtros" class="panel__titulo">Filtros</h2>
+          <button id="cerrar-filtros" class="panel__cerrar" type="button" aria-label="Cerrar filtros">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+          </button>
+        </div>
+        <form id="form-filtros" class="panel__cuerpo"></form>
+        <div class="panel__pie">
+          <button id="limpiar" class="btn btn--secundario" type="button">Limpiar</button>
+          <button id="ver-resultados" class="btn" type="button">Ver productos</button>
+        </div>
+      </dialog>
+
+      <section class="resultados" aria-labelledby="titulo-catalogo">
+        <h2 id="titulo-catalogo" class="sr">Catálogo</h2>
+        <div class="barra">
+          <p id="contador" class="barra__contador" aria-live="polite">{{total}}</p>
+          <label class="orden">
+            <span class="sr">Ordenar por</span>
+            <select id="orden">
+              <option value="recomendado">Recomendadas</option>
+              <option value="recientes">Más recientes</option>
+              <option value="precio-asc">Precio: menor a mayor</option>
+              <option value="precio-desc">Precio: mayor a menor</option>
+            </select>
+          </label>
+        </div>
+        <div id="chips" class="chips" hidden></div>
+        <div id="grilla" class="grilla">
+{{grilla}}
+        </div>
+        <div id="vacio" class="vacio" hidden>
+          <p class="vacio__titulo">No hay productos con esos filtros</p>
+          <button id="limpiar-vacio" class="btn btn--secundario" type="button">Limpiar filtros</button>
+        </div>
+        <button id="ver-mas" class="btn btn--secundario ver-mas" type="button" hidden>Ver más</button>
+      </section>
+    </div>
+  </main>
+
+{{pie}}
+</body>
+</html>
