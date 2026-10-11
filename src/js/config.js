@@ -1,8 +1,8 @@
 // Configuración de la tienda. Lo usan el navegador y scripts/build.mjs.
 
 export const CONFIG = {
-  TIENDA: 'Bruma',
-  LEMA: 'Vapes desechables, pods y líquidos en Parral',
+  TIENDA: 'Smoke Parral',
+  LEMA: 'La mejor calidad a bajo precio',
   SITIO_URL: 'https://maciasdav.github.io/vapes-catalogo', // sin barra final
 
   // Hoja de Google Sheets. Vacío = se usan los datos de ejemplo de datos/ejemplo.json.
@@ -17,6 +17,7 @@ export const CONFIG = {
 
   // Opcionales: vacío = no se muestran en el pie de página.
   INSTAGRAM: '', // solo el usuario, sin @
+  CANAL: 'https://whatsapp.com/channel/0029VbD6bUr4tRromUrulA2z', // canal de WhatsApp
   HORARIO: '',
   ENVIOS: 'Entregas en Parral. Pedimos carnet al entregar.',
 

@@ -1,13 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
-  <defs><radialGradient id="n" cx="78%" cy="40%" r="55%"><stop offset="0" stop-color="#6b2850" stop-opacity=".22"/><stop offset="1" stop-color="#6b2850" stop-opacity="0"/></radialGradient></defs>
-  <rect width="1200" height="630" fill="#eef0ec"/>
-  <rect width="1200" height="630" fill="url(#n)"/>
-  <g transform="translate(820 110) scale(12)" fill="none" stroke="#142120" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="11" y="11" width="10" height="18" rx="3.5"/>
-    <path d="M14 11V8.5h4V11"/><path d="M14 22h4"/>
-    <path d="M16 5.5c-1.6-1-1.6-2.4 0-3.4"/><path d="M20.5 6c1.5-.8 3-.4 3.8.8"/><path d="M11.5 6c-1.5-.8-3-.4-3.8.8"/>
-  </g>
-  <text x="96" y="310" font-family="'Bricolage Grotesque', 'DejaVu Sans', Arial, sans-serif" font-size="150" font-weight="800" letter-spacing="-6" fill="#142120">Bruma</text>
-  <text x="100" y="390" font-family="'DejaVu Sans', Arial, sans-serif" font-size="38" fill="#55625e">Vapes en Parral · Pide por WhatsApp</text>
-  <text x="100" y="540" font-family="'DejaVu Sans', Arial, sans-serif" font-size="26" font-weight="700" fill="#6b2850">Solo mayores de 18 años</text>
+  <rect width="1200" height="630" fill="#e4e3df"/>
+  <text x="90" y="280" font-family="Archivo, 'DejaVu Sans', Arial, sans-serif" font-size="104" font-weight="900" letter-spacing="-3" fill="#232321">SMOKE</text>
+  <text x="94" y="370" font-family="Archivo, 'DejaVu Sans', Arial, sans-serif" font-size="64" font-weight="700" fill="#232321">Parral</text>
+  <text x="94" y="440" font-family="'DejaVu Sans', Arial, sans-serif" font-size="32" fill="#6c6b67">La mejor calidad a bajo precio</text>
+  <text x="94" y="540" font-family="'DejaVu Sans', Arial, sans-serif" font-size="24" font-weight="700" fill="#b8360f">Solo mayores de 18 años</text>
 </svg>

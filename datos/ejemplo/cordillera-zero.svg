@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
   <defs><radialGradient id="n" cx="50%" cy="38%" r="60%"><stop offset="0" stop-color="#9cb8b0" stop-opacity=".35"/><stop offset="1" stop-color="#9cb8b0" stop-opacity="0"/></radialGradient></defs>
-  <rect width="600" height="600" fill="#e2e6df"/>
+  <rect width="600" height="600" fill="#d6d5d0"/>
   <rect width="600" height="600" fill="url(#n)"/>
   <ellipse cx="300" cy="512" rx="130" ry="14" fill="#142120" opacity=".1"/>
   <defs><linearGradient id="d" x1="0" x2="1"><stop offset="0" stop-color="#f0eee8"/><stop offset="1" stop-color="#c9d6d2"/></linearGradient></defs>

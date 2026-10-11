@@ -13,7 +13,7 @@ if (!confirmado()) {
   aviso.className = 'edad';
   aviso.setAttribute('aria-labelledby', 'edad-titulo');
   aviso.innerHTML = `
-    <p class="edad__marca">${escapeHTML(CONFIG.TIENDA)}</p>
+    <img class="edad__logo" src="${document.documentElement.dataset.base}img/logo-320.webp" alt="${escapeHTML(CONFIG.TIENDA)}" width="112" height="112">
     <h2 id="edad-titulo" class="edad__titulo">¿Tienes 18 años o más?</h2>
     <p class="edad__texto">${escapeHTML(ADVERTENCIA)}</p>
     <div class="edad__botones">

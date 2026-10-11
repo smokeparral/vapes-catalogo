@@ -67,12 +67,17 @@ main > *,
   gap: var(--espacio-2);
   flex: none;
   text-decoration: none;
-  font-family: var(--fuente-titulos);
+  font-stretch: var(--ancho-display);
   font-weight: 800;
-  font-size: 1.375rem;
-  letter-spacing: -0.03em;
+  font-size: 1.125rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
-.marca svg { width: 28px; height: 28px; stroke-width: 1.8; }
+.marca__logo { flex: none; width: 40px; height: 40px; border-radius: 50%; }
+/* En celular la búsqueda necesita el ancho; el logo ya dice "SMOKE Parral". */
+@media (max-width: 559px) {
+  .cabecera .marca__nombre { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
 
 .busqueda {
   position: relative;
@@ -162,7 +167,7 @@ main > *,
 
 .seccion__titulo {
   margin-bottom: var(--espacio-3);
-  font-family: var(--fuente-titulos);
+  font-stretch: var(--ancho-display);
   font-size: var(--texto-l);
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -279,7 +284,7 @@ main > *,
   border-radius: var(--radio-m);
   transition: transform var(--rapido) var(--ease-out);
 }
-.tarjeta:active { transform: scale(0.97); }
+.tarjeta:active { transform: scale(0.98); }
 .tarjeta:focus-visible { outline-offset: 4px; }
 
 .tarjeta__media {
@@ -315,7 +320,7 @@ main > *,
   font-weight: 600;
   letter-spacing: 0.01em;
 }
-.badge--nueva { background: var(--acento); color: var(--acento-tinta); }
+.badge--nueva { background: var(--brasa); color: #fff; }
 
 .tarjeta__nombre {
   display: -webkit-box;
@@ -578,7 +583,10 @@ main > *,
 }
 .migas li + li::before { content: '/'; margin-inline-end: var(--espacio-2); color: var(--borde-fuerte); }
 .migas a { text-decoration: none; }
-.migas a:hover { text-decoration: underline; }
+.migas a, .pie__enlaces a { text-underline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  .migas a:hover { text-decoration: underline; }
+}
 .migas [aria-current] { color: var(--tinta); }
 
 .ficha {
@@ -626,13 +634,13 @@ main > *,
 
 .ficha__info { display: grid; gap: var(--espacio-4); align-content: start; }
 .ficha__categoria { color: var(--tinta-2); font-size: var(--texto-s); font-weight: 500; }
-.ficha__nombre { font-family: var(--fuente-titulos); font-size: var(--texto-xl); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.ficha__nombre { text-wrap: balance; font-stretch: var(--ancho-display); font-size: var(--texto-xl); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; overflow-wrap: anywhere; }
 .ficha__precio { font-size: var(--texto-l); font-weight: 700; font-variant-numeric: tabular-nums; }
 .ficha__titulos { display: grid; gap: var(--espacio-2); }
 
 .estado { display: inline-flex; align-items: center; gap: var(--espacio-2); font-size: var(--texto-s); font-weight: 500; }
 .estado::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--exito); }
-.estado--pocas::before { background: var(--acento); }
+.estado--pocas::before { background: var(--brasa); }
 .estado--agotada { color: var(--tinta-2); }
 .estado--agotada::before { background: var(--borde-fuerte); }
 
@@ -665,7 +673,12 @@ main > *,
   }
   .pedido .btn { display: none; }
   .barra-pedido__precio { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .barra-pedido .btn { flex: 1; }
+  /* min-width: 0 deja que el botón ceda ante precios largos ($1.299.990) en pantallas de 320px. */
+  .barra-pedido .btn { flex: 1; min-width: 0; padding-inline: var(--espacio-4); }
+  .barra-pedido .btn > :not(svg) { overflow: hidden; text-overflow: ellipsis; }
+}
+@media (max-width: 359.98px) {
+  .barra-pedido .btn svg { display: none; }
 }
 
 .relacionadas { padding-bottom: var(--espacio-7); }
@@ -691,10 +704,39 @@ main > *,
 .pie .marca { color: var(--tinta); margin-bottom: var(--espacio-2); }
 .pie__enlaces { display: flex; flex-wrap: wrap; gap: var(--espacio-2) var(--espacio-4); }
 .pie__enlaces a { display: inline-flex; align-items: center; min-height: 44px; color: var(--tinta); font-weight: 500; text-decoration: none; }
-.pie__enlaces a:hover { text-decoration: underline; }
+@media (hover: hover) and (pointer: fine) {
+  .pie__enlaces a:hover { text-decoration: underline; }
+}
 .pie__nota { grid-column: 1 / -1; font-size: var(--texto-xs); }
 
-/* ============================================================ vapes */
+/* ============================================================ Smoke Parral */
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-4);
+  padding-block: var(--espacio-5) var(--espacio-2);
+}
+.hero__logo {
+  flex: none;
+  width: clamp(96px, 26vw, 160px);
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: 0 10px 30px -12px rgb(35 35 33 / 0.45);
+}
+.hero__texto { display: grid; gap: var(--espacio-2); justify-items: start; min-width: 0; }
+.hero__titulo {
+  font-stretch: var(--ancho-display);
+  font-size: clamp(1.75rem, 1.1rem + 3.4vw, 3.5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.hero__lema { color: var(--tinta-2); font-size: var(--texto-m); line-height: 1.35; text-wrap: pretty; }
+.hero .btn { min-height: 40px; margin-top: var(--espacio-1); padding-inline: var(--espacio-4); font-size: var(--texto-s); }
 
 .tarjeta__marca {
   color: var(--tinta-2);
@@ -704,15 +746,28 @@ main > *,
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.tarjeta__sabores { color: var(--tinta-2); font-size: var(--texto-xs); }
-
-/* El pedido por WhatsApp es la acción principal: va en maqui. */
-.pedido .btn,
-.barra-pedido .btn {
-  background: var(--acento);
-  border-color: var(--acento);
-  color: var(--acento-tinta);
+.tarjeta__extra {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
 }
+
+.ficha__datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
+  margin: 0;
+}
+.ficha__datos div {
+  padding: var(--espacio-2) var(--espacio-3);
+  border-radius: var(--radio-s);
+  background: var(--superficie);
+}
+.ficha__datos dt { color: var(--tinta-2); font-size: var(--texto-xs); }
+.ficha__datos dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
 
 .pie__advertencia {
   grid-column: 1 / -1;
@@ -724,7 +779,14 @@ main > *,
   font-weight: 600;
 }
 
-/* Aviso de mayoría de edad */
+/* Controles: sin selección de texto al mantener presionado, sin espera de doble toque. */
+button, .btn, .chip, .check__caja, .tarjeta, .galeria__mini {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Aviso de mayoría de edad: aparece una vez, así que puede materializarse. */
 .edad {
   width: min(100% - 2 * var(--margen), 400px);
   padding: var(--espacio-6) var(--espacio-5) var(--espacio-5);
@@ -733,28 +795,41 @@ main > *,
   background: var(--superficie);
   color: var(--tinta);
   text-align: center;
+  box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.35);
+  transition: opacity 280ms var(--ease-out), transform 280ms var(--ease-out), filter 280ms var(--ease-out);
+}
+@starting-style {
+  .edad[open] { opacity: 0; transform: scale(0.96); filter: blur(6px); }
 }
 .edad::backdrop {
-  background: rgb(238 240 236 / 0.6);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: rgb(228 227 223 / 0.55);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  backdrop-filter: blur(20px) saturate(120%);
 }
 @media (prefers-color-scheme: dark) {
-  .edad::backdrop { background: rgb(18 22 21 / 0.65); }
+  .edad::backdrop { background: rgb(28 28 27 / 0.6); }
 }
-.edad__marca {
-  font-family: var(--fuente-titulos);
-  font-size: 2.5rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1;
+@media (prefers-reduced-motion: reduce) {
+  .edad { transition: opacity 200ms ease; }
+  @starting-style { .edad[open] { opacity: 0; transform: none; filter: none; } }
 }
+@media (prefers-reduced-transparency: reduce) {
+  .edad::backdrop { background: var(--fondo); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+.edad__logo { width: 112px; height: 112px; margin-inline: auto; border-radius: 50%; }
 .edad__titulo {
   margin-top: var(--espacio-4);
+  font-stretch: var(--ancho-display);
   font-size: var(--texto-l);
-  font-weight: 700;
-  line-height: 1.25;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 .edad__texto { margin-top: var(--espacio-2); color: var(--tinta-2); font-size: var(--texto-s); }
 .edad__botones { display: grid; gap: var(--espacio-2); margin-top: var(--espacio-5); }
-.edad__botones .btn:first-child { background: var(--acento); border-color: var(--acento); color: var(--acento-tinta); }
+
+/* Sabores largos ("Frutilla Kiwi Sandía Hielo Menta") ocupan dos líneas: una píldora de 999px se deforma. */
+.opciones .check__caja { border-radius: 20px; padding-block: var(--espacio-2); line-height: 1.3; }
+
+/* El nombre ya está en el título; en las migas basta una línea. */
+.migas li[aria-current] { min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

@@ -45,8 +45,10 @@ function parseCSV(texto) {
 
 async function leerFilas() {
   if (USAR_EJEMPLO) {
-    console.log('CONFIG.SHEET_ID está vacío: usando datos/ejemplo.json');
-    return JSON.parse(await readFile(path.join(RAIZ, 'datos', 'ejemplo.json'), 'utf8'));
+    // Solo para desarrollo: DATOS=peor npm run dev prueba el diseño con datos extremos.
+    const archivo = process.env.DATOS === 'peor' ? 'peor-caso.json' : 'ejemplo.json';
+    console.log(`CONFIG.SHEET_ID está vacío: usando datos/${archivo}`);
+    return JSON.parse(await readFile(path.join(RAIZ, 'datos', archivo), 'utf8'));
   }
   const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/export?format=csv&gid=${CONFIG.SHEET_GID}`;
   const res = await fetch(url);
@@ -233,7 +235,7 @@ async function prepararFotos(productos) {
 // ---------------------------------------------------------------- HTML
 
 const ICONOS = {
-  logo: '<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="11" y="11" width="10" height="18" rx="3.5"/><path d="M14 11V8.5h4V11"/><path d="M14 22h4"/><path d="M16 5.5c-1.6-1-1.6-2.4 0-3.4"/><path d="M20.5 6c1.5-.8 3-.4 3.8.8"/><path d="M11.5 6c-1.5-.8-3-.4-3.8.8"/></svg>',
+  canal: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l5 4V6L7 10H4z"/><path d="M16 9.5a3.5 3.5 0 0 1 0 5M18.5 7a7 7 0 0 1 0 10"/></svg>',
   chat: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5z"/><path d="M9 10.5h6M9 13.5h4"/></svg>',
 };
 
@@ -245,7 +247,24 @@ const actualizado = new Intl.DateTimeFormat(CONFIG.LOCALE, {
   day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', timeZone: CONFIG.ZONA_HORARIA,
 }).format(AHORA);
 
-const marcaHTML = `<a class="marca" href="${BASE}" aria-label="${escapeHTML(CONFIG.TIENDA)}, inicio">${ICONOS.logo}<span>${escapeHTML(CONFIG.TIENDA)}</span></a>`;
+const marcaHTML = `<a class="marca" href="${BASE}" aria-label="${escapeHTML(CONFIG.TIENDA)}, inicio">
+        <img class="marca__logo" src="${BASE}img/logo-96.webp" alt="" width="40" height="40">
+        <span class="marca__nombre">${escapeHTML(CONFIG.TIENDA)}</span>
+      </a>`;
+
+function heroHTML() {
+  const canal = CONFIG.CANAL
+    ? `<a class="btn btn--secundario" href="${escapeHTML(CONFIG.CANAL)}">${ICONOS.canal}Seguir el canal</a>`
+    : '';
+  return `<section class="hero" aria-labelledby="titulo-tienda">
+      <img class="hero__logo" src="${BASE}img/logo-320.webp" alt="" width="160" height="160" fetchpriority="high">
+      <div class="hero__texto">
+        <h1 id="titulo-tienda" class="hero__titulo">${escapeHTML(CONFIG.TIENDA)}</h1>
+        <p class="hero__lema">${escapeHTML(CONFIG.LEMA)}</p>
+        ${canal}
+      </div>
+    </section>`;
+}
 
 function cabezaHTML({ titulo, descripcion, url, imagen, tipo = 'website', extra = '' }) {
   return `  <meta charset="utf-8">
@@ -263,13 +282,13 @@ function cabezaHTML({ titulo, descripcion, url, imagen, tipo = 'website', extra 
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="es_CL">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#eef0ec" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#121615" media="(prefers-color-scheme: dark)">
-  <link rel="icon" href="${BASE}img/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#e4e3df" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1c1c1b" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="${BASE}img/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="${BASE}img/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
   <link rel="stylesheet" href="${BASE}css/tokens.css">
   <link rel="stylesheet" href="${BASE}css/base.css">
   <link rel="stylesheet" href="${BASE}css/components.css">
@@ -278,6 +297,7 @@ ${extra}`;
 
 function pieHTML() {
   const enlaces = [`<a href="https://wa.me/${CONFIG.WHATSAPP}">WhatsApp ${telefono}</a>`];
+  if (CONFIG.CANAL) enlaces.push(`<a href="${escapeHTML(CONFIG.CANAL)}">Canal de WhatsApp</a>`);
   if (CONFIG.INSTAGRAM) enlaces.push(`<a href="https://instagram.com/${encodeURIComponent(CONFIG.INSTAGRAM)}">Instagram</a>`);
   const datos = [CONFIG.HORARIO, CONFIG.ENVIOS].filter(Boolean).map(t => `<p>${escapeHTML(t)}</p>`).join('');
   return `  <footer class="pie">
@@ -289,7 +309,7 @@ function pieHTML() {
       </div>
       <nav class="pie__enlaces" aria-label="Contacto">${enlaces.join('')}</nav>
       <p class="pie__advertencia">${escapeHTML(ADVERTENCIA)}</p>
-      <p class="pie__nota">El stock es informativo; confirmamos disponibilidad por WhatsApp. · Actualizado: ${actualizado}</p>
+      <p class="pie__nota">El stock es informativo; confirmamos disponibilidad por WhatsApp.<br>Actualizado el ${actualizado}.</p>
     </div>
   </footer>`;
 }
@@ -317,6 +337,15 @@ function opcionesHTML(nombre, titulo, valores) {
             </label>`).join('\n            ')}
           </div>
         </fieldset>`;
+}
+
+// Datos fijos del producto como lista, no como "A · B · C".
+function datosHTML(g) {
+  const filas = [['Marca', g.marca], ['Duración', textoCaladas(g.caladas)]].filter(([, v]) => v);
+  if (!filas.length) return '';
+  return `<dl class="ficha__datos">
+          ${filas.map(([k, v]) => `<div><dt>${k}</dt><dd>${escapeHTML(v)}</dd></div>`).join('\n          ')}
+        </dl>`;
 }
 
 function fichaHTML(g, productos) {
@@ -366,11 +395,12 @@ function fichaHTML(g, productos) {
 
       <div class="ficha__info">
         <div class="ficha__titulos">
-          <p class="ficha__categoria">${escapeHTML([g.categoria, g.marca, textoCaladas(g.caladas)].filter(Boolean).join(' · '))}</p>
+          <p class="ficha__categoria">${escapeHTML(g.categoria)}</p>
           <h1 class="ficha__nombre">${escapeHTML(g.nombre)}</h1>
           <p class="ficha__precio">${textoPrecio(g.precio)}</p>
           ${estado}
         </div>
+        ${datosHTML(g)}
         ${opcionesHTML('sabor', 'Sabor', g.sabores)}
         ${opcionesHTML('nicotina', 'Nicotina', g.nicotina)}
         <div class="pedido">
@@ -390,7 +420,7 @@ function fichaHTML(g, productos) {
 
     <div class="barra-pedido">
       <span class="barra-pedido__precio">${textoPrecio(g.precio)}</span>
-      <a class="btn" href="${whatsapp}" data-whatsapp>${ICONOS.chat}${textoBoton}</a>
+      <a class="btn" href="${whatsapp}" data-whatsapp>${ICONOS.chat}<span>${textoBoton}</span></a>
     </div>`;
 }
 
@@ -434,6 +464,7 @@ async function generar(productos) {
       url: `${URL_SITIO}/`,
       imagen: ogDefecto,
     }),
+    hero: heroHTML(),
     destacados: destacadosHTML(productos),
     total: plural(productos.length, 'producto', 'productos'),
     grilla: ordenadas.map((g, i) => tarjetaHTML(g, BASE, { prioridad: i < 4 })).join('\n'),
@@ -505,10 +536,22 @@ async function copiarEstaticos() {
     await cp(path.join(SRC, dir), path.join(SALIDA, dir), { recursive: true });
   }
   const img = path.join(SRC, 'img');
-  await sharp(path.join(img, 'og-default.svg')).jpeg({ quality: 85, mozjpeg: true })
-    .toFile(path.join(SALIDA, 'img', 'og-default.jpg'));
-  await sharp(path.join(img, 'favicon.svg'), { density: 600 }).resize(180, 180)
-    .flatten({ background: '#eef0ec' }).png().toFile(path.join(SALIDA, 'img', 'apple-touch-icon.png'));
+  const salida = nombre => path.join(SALIDA, 'img', nombre);
+  const logo = path.join(img, 'logo.jpg');
+  // El logo es un círculo sobre fondo claro: se recorta en círculo para favicon y tarjeta de compartir.
+  const circular = tam => sharp(logo).resize(tam, tam).composite([{
+    input: Buffer.from(`<svg width="${tam}" height="${tam}"><circle cx="${tam / 2}" cy="${tam / 2}" r="${tam / 2}"/></svg>`),
+    blend: 'dest-in',
+  }]).png();
+  await Promise.all([
+    sharp(logo).resize(96, 96).webp({ quality: 82 }).toFile(salida('logo-96.webp')),
+    sharp(logo).resize(320, 320).webp({ quality: 82 }).toFile(salida('logo-320.webp')),
+    circular(64).toFile(salida('favicon.png')),
+    sharp(logo).resize(180, 180).png().toFile(salida('apple-touch-icon.png')),
+  ]);
+  await sharp(path.join(img, 'og-default.svg'))
+    .composite([{ input: await circular(440).toBuffer(), left: 700, top: 95 }])
+    .jpeg({ quality: 85, mozjpeg: true }).toFile(salida('og-default.jpg'));
 }
 
 // ---------------------------------------------------------------- main

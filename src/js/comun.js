@@ -65,16 +65,14 @@ export function tarjetaHTML(p, base, { prioridad = false } = {}) {
     ? '<span class="badge">Agotado</span>'
     : p.nuevo ? '<span class="badge badge--nueva">Nuevo</span>' : '';
   const aviso = !agotado && p.stock <= 2 ? '<span class="tarjeta__aviso">Últimas unidades</span>' : '';
-  const detalle = [p.marca, textoCaladas(p.caladas)].filter(Boolean).join(' · ');
-  const sabores = p.sabores.length > 1
-    ? `<span class="tarjeta__sabores">${plural(p.sabores.length, 'sabor', 'sabores')}</span>`
-    : p.sabores.length ? `<span class="tarjeta__sabores">${escapeHTML(p.sabores[0])}</span>` : '';
+  const sabores = p.sabores.length > 1 ? plural(p.sabores.length, 'sabor', 'sabores') : p.sabores[0];
+  const extra = [textoCaladas(p.caladas), sabores].filter(Boolean).join(', ');
 
   return `<a class="tarjeta${agotado ? ' tarjeta--agotada' : ''}" href="${base}productos/${p.id}/">
   <span class="tarjeta__media">${img} alt="" width="600" height="600" ${prioridad ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" onerror="this.onerror=null;this.removeAttribute('srcset');this.src='${placeholder}'">${badge}</span>
-  ${detalle ? `<span class="tarjeta__marca">${escapeHTML(detalle)}</span>` : ''}
+  ${p.marca ? `<span class="tarjeta__marca">${escapeHTML(p.marca)}</span>` : ''}
   <span class="tarjeta__nombre">${escapeHTML(p.nombre)}</span>
   <span class="tarjeta__precio">${textoPrecio(p.precio)}${aviso}</span>
-  ${sabores}
+  ${extra ? `<span class="tarjeta__extra">${escapeHTML(extra)}</span>` : ''}
 </a>`;
 }

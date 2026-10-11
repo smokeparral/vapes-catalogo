@@ -1,4 +1,4 @@
-# Catálogo de vapes (Bruma, Parral)
+# Catálogo de Smoke Parral
 
 Catálogo web alojado en GitHub Pages. Los productos se administran desde Google Sheets
 y las fotos desde Google Drive; no hace falta tocar este repositorio para agregar,
@@ -98,7 +98,8 @@ y reemplázalo en las propiedades del script.
 
 ```bash
 npm install
-npm run dev      # genera _site/ y lo sirve en http://localhost:8080/vapes-catalogo/
+npm run dev                # genera _site/ y lo sirve en http://localhost:8080/vapes-catalogo/
+DATOS=peor npm run dev     # lo mismo con datos extremos (datos/peor-caso.json) para probar el diseño
 ```
 
 | Ruta | Qué es |
@@ -115,5 +116,5 @@ Si el build no puede leer la hoja o la hoja no tiene productos visibles, falla y
 sigue en línea. Los avisos (fotos que no se pudieron descargar, filas sin precio…) aparecen en el
 resumen de cada ejecución en la pestaña **Actions**.
 
-Si cambias el nombre de la tienda, actualiza también el texto de `src/img/og-default.svg`
+Si cambias el nombre o el logo de la tienda, actualiza `src/img/logo.jpg` y el texto de `src/img/og-default.svg`
 (la imagen que aparece al compartir el link del catálogo).
