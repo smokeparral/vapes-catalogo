@@ -110,7 +110,9 @@ function normalizar(filas) {
     const n = i + 2; // número de fila en la hoja (la 1 son los encabezados)
     const nombre = texto(f.nombre);
     if (!nombre) {
-      if (Object.values(f).some(v => texto(v))) avisos.push(`Fila ${n}: no tiene nombre, se omitió.`);
+      // Las casillas de verificación llegan como TRUE/FALSE aunque la fila esté vacía.
+      const conDatos = Object.entries(f).some(([k, v]) => !['destacado', 'visible'].includes(k) && texto(v));
+      if (conDatos) avisos.push(`Fila ${n}: no tiene nombre, se omitió.`);
       return;
     }
     if (!booleano(f.visible, true)) return;

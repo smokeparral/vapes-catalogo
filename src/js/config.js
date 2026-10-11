@@ -6,8 +6,8 @@ export const CONFIG = {
   SITIO_URL: 'https://smokeparral.github.io/vapes-catalogo', // sin barra final
 
   // Hoja de Google Sheets. Vacío = se usan los datos de ejemplo de datos/ejemplo.json.
-  SHEET_ID: '',
-  SHEET_GID: '0', // pestaña: el número después de "gid=" en la URL de la hoja
+  SHEET_ID: '195q9PPwFk6Va4rXU1LzLDz8VKiMALRPdPmFtvHMbl88',
+  SHEET_GID: '1476054134', // pestaña: el número después de "gid=" en la URL de la hoja
 
   MONEDA: 'CLP',
   LOCALE: 'es-CL',
