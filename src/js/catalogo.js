@@ -24,6 +24,8 @@ const el = {
   limpiarVacio: $('#limpiar-vacio'),
   verMas: $('#ver-mas'),
   destacados: $('#destacados'),
+  promos: $('#promos'),
+  categorias: $('#categorias'),
 };
 const escritorio = matchMedia('(min-width: 1024px)');
 const CLAVE_SCROLL = 'catalogo-scroll';
@@ -88,6 +90,12 @@ function construirFiltros() {
       <span class="interruptor__texto">Solo disponibles</span>
       <span class="interruptor__pista" aria-hidden="true"></span>
     </label>
+    ${productos.some(p => p.promo) ? `
+    <label class="interruptor">
+      <input type="checkbox" name="promo" role="switch">
+      <span class="interruptor__texto">Solo promos</span>
+      <span class="interruptor__pista" aria-hidden="true"></span>
+    </label>` : ''}
     ${grupo('Tipo', 'cat', ops.cat)}
     ${grupo('Marca', 'marca', ops.marca)}
     ${grupo('Sabor', 'sabor', ops.sabor)}
@@ -114,7 +122,7 @@ function leerFormulario() {
   return {
     ...criterios,
     cat: fd.getAll('cat'), marca: fd.getAll('marca'), sabor: fd.getAll('sabor'), nic: fd.getAll('nic'),
-    min: num('min'), max: num('max'), disp: fd.has('disp'),
+    min: num('min'), max: num('max'), disp: fd.has('disp'), promo: fd.has('promo'),
   };
 }
 
@@ -123,7 +131,9 @@ function sincronizarControles() {
   el.orden.value = criterios.orden;
   for (const input of el.form.elements) {
     if (input.type === 'checkbox') {
-      input.checked = input.name === 'disp' ? criterios.disp : criterios[input.name]?.includes(input.value);
+      input.checked = typeof criterios[input.name] === 'boolean'
+        ? criterios[input.name]
+        : criterios[input.name]?.includes(input.value);
     } else if (input.type === 'number') {
       input.value = criterios[input.name] ?? '';
     }
@@ -149,17 +159,30 @@ function pintar() {
   el.verMas.hidden = n <= visibles;
   el.contador.textContent = plural(n, 'producto', 'productos');
   el.verResultados.textContent = n ? `Ver ${plural(n, 'producto', 'productos')}` : 'Sin resultados';
-  if (el.destacados) el.destacados.hidden = hayFiltros(criterios);
+  const filtrando = hayFiltros(criterios);
+  if (el.destacados) el.destacados.hidden = filtrando;
+  if (el.promos) el.promos.hidden = filtrando;
+  pintarCategorias();
   const activos = cuentaFiltros(criterios);
   el.nFiltros.textContent = activos;
   el.nFiltros.hidden = activos === 0;
   pintarChips();
 }
 
+// Accesos rápidos por tipo: un toque filtra por esa categoría, otro lo quita.
+function pintarCategorias() {
+  if (!el.categorias) return;
+  const actual = criterios.cat.length === 1 ? criterios.cat[0] : '';
+  for (const b of el.categorias.querySelectorAll('[data-cat]')) {
+    b.setAttribute('aria-pressed', String(b.dataset.cat === actual));
+  }
+}
+
 function pintarChips() {
   const chips = [];
   if (criterios.q.trim()) chips.push(['q', '', `“${criterios.q.trim()}”`]);
   if (criterios.disp) chips.push(['disp', '', 'Solo disponibles']);
+  if (criterios.promo) chips.push(['promo', '', 'Solo promos']);
   for (const k of ['cat', 'marca', 'sabor', 'nic']) {
     for (const v of criterios[k]) chips.push([k, v, etiquetas[k]?.get(v) ?? v]);
   }
@@ -283,12 +306,20 @@ function conectarEventos() {
     }
     const c = { ...criterios };
     if (k === 'q') c.q = '';
-    else if (k === 'disp') c.disp = false;
+    else if (k === 'disp' || k === 'promo') c[k] = false;
     else if (k === 'min' || k === 'max') c[k] = null;
     else c[k] = c[k].filter(x => x !== v);
     cambiar(c);
     sincronizarControles();
     (el.chips.children[indice] ?? el.chips.lastElementChild ?? el.busqueda).focus();
+  });
+
+  el.categorias?.addEventListener('click', e => {
+    const b = e.target.closest('[data-cat]');
+    if (!b) return;
+    const activa = b.getAttribute('aria-pressed') === 'true';
+    cambiar({ ...criterios, cat: activa || !b.dataset.cat ? [] : [b.dataset.cat] });
+    sincronizarControles();
   });
 
   el.btnFiltros.addEventListener('click', () => el.panel.showModal());

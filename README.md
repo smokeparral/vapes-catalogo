@@ -29,6 +29,12 @@ Si se te olvida publicar, la web se actualiza sola en menos de una hora.
 ### Marcar como agotado
 Pon `stock` en `0` y publica. Sigue visible con la etiqueta "Agotado" y los clientes pueden preguntar si vuelve.
 
+### Poner o quitar una promo
+Escribe en `promo` la cantidad y el precio total, por ejemplo `2x22000` (2 por $22.000), y publica.
+La web le pone el sello de promo, lo muestra en la sección "Promos" y calcula cuánto se ahorra.
+Para quitarla, borra la celda y publica. Si la promo no es más barata que comprar por separado,
+aparece un aviso en la pestaña **Actions**.
+
 ### Ocultar un producto temporalmente
 Desmarca `visible` y publica. Vuelve a marcarla cuando regrese.
 
@@ -51,6 +57,7 @@ Si quieres cambiar una foto, sube una nueva a Drive y pega su link (no reemplace
 | `sabores` | Separados por coma: `Sandía Hielo, Mango, Uva`. Vacío si no aplica |
 | `nicotina` | `20 mg` o `Sin nicotina, 3 mg, 6 mg`. Vacío si no aplica |
 | `caladas` | Solo el número: `6000`. Vacío si no aplica |
+| `promo` | Opcional. `2x22000` o `3 por 25.000` (cantidad x precio total de la promo), o un texto libre como `Pod de regalo`. Vacío = sin promo |
 | `fotos` | Links de Google Drive |
 | `descripcion` | Opcional |
 | `destacado` | Casilla: aparece en "Destacados" |

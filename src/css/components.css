@@ -41,25 +41,48 @@ main > *,
   .btn--secundario:hover { opacity: 1; border-color: var(--tinta); }
 }
 
-/* ============================================================ cabecera */
+/* ============================================================ cabecera flotante */
+
+/* Capa funcional: cápsulas de vidrio que flotan sobre el contenido, sin barra de fondo.
+   El vidrio solo va aquí y en la barra de pedido, nunca en el contenido. */
+.vidrio {
+  background: var(--vidrio-fondo);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  backdrop-filter: blur(24px) saturate(1.4);
+  box-shadow: inset 0 1px 0 var(--vidrio-luz), 0 0 0 1px var(--vidrio-borde), 0 8px 24px -10px rgb(0 0 0 / 0.35);
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .vidrio { background: var(--superficie); -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 0 0 1px var(--borde-fuerte); }
+}
 
 .cabecera {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  padding-top: env(safe-area-inset-top);
-  background: var(--vidrio);
-  -webkit-backdrop-filter: saturate(180%) blur(16px);
-  backdrop-filter: saturate(180%) blur(16px);
-  border-bottom: 1px solid var(--borde);
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 20;
+  padding-top: max(var(--espacio-2), env(safe-area-inset-top));
+  pointer-events: none; /* el espacio entre cápsulas deja tocar lo de abajo */
 }
-
+/* Borde de desplazamiento: el contenido se desenfoca al pasar bajo las cápsulas, sin línea divisoria. */
+.cabecera::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 -16px;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(#000 55%, transparent);
+  mask-image: linear-gradient(#000 55%, transparent);
+}
 .cabecera__fila {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: var(--espacio-3);
-  height: var(--alto-cabecera);
+  gap: var(--espacio-2);
+  height: calc(var(--alto-cabecera) - var(--espacio-2));
 }
+.cabecera__fila > * { pointer-events: auto; }
+
+main { padding-top: calc(var(--alto-cabecera) + env(safe-area-inset-top)); }
+.con-hero main { padding-top: 0; }
 
 .marca {
   display: flex;
@@ -69,25 +92,30 @@ main > *,
   text-decoration: none;
   font-stretch: var(--ancho-display);
   font-weight: 800;
-  font-size: 1.125rem;
+  font-size: 1.0625rem;
   letter-spacing: -0.02em;
   line-height: 1;
 }
 .marca__logo { flex: none; width: 40px; height: 40px; border-radius: 50%; }
+.marca.vidrio { height: 48px; padding: 4px; border-radius: var(--radio-total); }
+.marca.vidrio .marca__nombre { padding-inline-end: var(--espacio-3); }
 /* En celular la búsqueda necesita el ancho; el logo ya dice "SMOKE Parral". */
-@media (max-width: 559px) {
-  .cabecera .marca__nombre { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 719.98px) {
+  .marca.vidrio .marca__nombre { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
 
 .busqueda {
   position: relative;
   flex: 1;
-  max-width: 480px;
+  min-width: 0;
+  max-width: 440px;
+  height: 48px;
   margin-inline-start: auto;
+  border-radius: var(--radio-total);
 }
 .busqueda__icono {
   position: absolute;
-  left: 12px;
+  left: 15px;
   top: 50%;
   width: 18px;
   height: 18px;
@@ -97,43 +125,51 @@ main > *,
 }
 .busqueda input {
   width: 100%;
-  height: 40px;
-  padding: 0 var(--espacio-3) 0 38px;
-  border: 1px solid transparent;
-  border-radius: var(--radio-total);
-  background: var(--superficie);
+  height: 100%;
+  padding: 0 var(--espacio-4) 0 42px;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
   font-size: 16px; /* evita el zoom de iOS al enfocar */
   outline: none;
-  transition: border-color var(--rapido) var(--ease-out);
 }
 .busqueda input::placeholder { color: var(--tinta-2); }
-.busqueda input:focus-visible { border-color: var(--tinta); }
+.busqueda:focus-within { box-shadow: inset 0 1px 0 var(--vidrio-luz), 0 0 0 2px var(--tinta), 0 8px 24px -10px rgb(0 0 0 / 0.35); }
 .busqueda input:disabled { opacity: 0.6; }
 
-.btn-filtros {
+/* Botones redondos flotantes: filtros y WhatsApp. */
+.flotante {
   position: relative;
   display: grid;
   place-items: center;
   flex: none;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border: 0;
-  border-radius: var(--radio-total);
-  background: var(--superficie);
+  border-radius: 50%;
+  color: var(--tinta);
+  text-decoration: none;
   transition: transform var(--rapido) var(--ease-out);
 }
-.btn-filtros:active { transform: scale(0.94); }
-.btn-filtros svg { width: 20px; height: 20px; }
+.flotante:active { transform: scale(0.94); }
+.flotante svg { width: 22px; height: 22px; }
+/* La acción principal lleva color de fondo, no de icono; solo una por pantalla. */
+.flotante--wa {
+  background: var(--brasa);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.25), 0 8px 24px -8px rgb(120 30 8 / 0.7);
+}
+
 .btn-filtros__n {
   position: absolute;
-  top: 2px;
-  right: 2px;
+  top: 0;
+  right: 0;
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
   border-radius: var(--radio-total);
-  background: var(--tinta);
-  color: var(--fondo);
+  background: var(--brasa);
+  color: #fff;
   font-size: 11px;
   font-weight: 700;
   line-height: 18px;
@@ -144,18 +180,20 @@ main > *,
   display: inline-flex;
   align-items: center;
   gap: var(--espacio-1);
-  min-height: 44px;
+  height: 48px;
   margin-inline-start: auto;
-  padding-inline: var(--espacio-3);
+  padding-inline: var(--espacio-3) var(--espacio-4);
   border-radius: var(--radio-total);
   font-size: var(--texto-s);
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
+  transition: transform var(--rapido) var(--ease-out);
 }
+.cabecera__volver:active { transform: scale(0.97); }
 .cabecera__volver svg { width: 18px; height: 18px; }
 
 @media (min-width: 1024px) {
-  .btn-filtros { display: none; }
+  #btn-filtros { display: none; }
 }
 
 /* ============================================================ destacados */
@@ -320,7 +358,7 @@ main > *,
   font-weight: 600;
   letter-spacing: 0.01em;
 }
-.badge--nueva { background: var(--brasa); color: #fff; }
+.badge--nueva { background: var(--tinta); color: var(--fondo); }
 
 .tarjeta__nombre {
   display: -webkit-box;
@@ -711,33 +749,6 @@ main > *,
 
 /* ============================================================ Smoke Parral */
 
-.hero {
-  display: flex;
-  align-items: center;
-  gap: var(--espacio-4);
-  padding-block: var(--espacio-5) var(--espacio-2);
-}
-.hero__logo {
-  flex: none;
-  width: clamp(96px, 26vw, 160px);
-  height: auto;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  box-shadow: 0 10px 30px -12px rgb(35 35 33 / 0.45);
-}
-.hero__texto { display: grid; gap: var(--espacio-2); justify-items: start; min-width: 0; }
-.hero__titulo {
-  font-stretch: var(--ancho-display);
-  font-size: clamp(1.75rem, 1.1rem + 3.4vw, 3.5rem);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: -0.035em;
-  overflow-wrap: anywhere;
-  text-wrap: balance;
-}
-.hero__lema { color: var(--tinta-2); font-size: var(--texto-m); line-height: 1.35; text-wrap: pretty; }
-.hero .btn { min-height: 40px; margin-top: var(--espacio-1); padding-inline: var(--espacio-4); font-size: var(--texto-s); }
-
 .tarjeta__marca {
   color: var(--tinta-2);
   font-size: var(--texto-xs);
@@ -833,3 +844,161 @@ button, .btn, .chip, .check__caja, .tarjeta, .galeria__mini {
 
 /* El nombre ya está en el título; en las migas basta una línea. */
 .migas li[aria-current] { min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ============================================================ portada */
+
+/* Lo único llamativo de la página: losa grafito, humo y brasa. Todo lo demás queda quieto. */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  max-width: none;
+  padding: calc(var(--alto-cabecera) + env(safe-area-inset-top) + var(--espacio-6)) 0 var(--espacio-7);
+  background: var(--losa);
+  color: #ecebe7;
+}
+.hero__humo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  opacity: 0.55;
+  -webkit-mask-image: radial-gradient(120% 90% at 80% 30%, #000 20%, transparent 75%);
+  mask-image: radial-gradient(120% 90% at 80% 30%, #000 20%, transparent 75%);
+  /* Momento único: el humo sube al cargar. Animación CSS: no compite con la carga de la página. */
+  animation: humo-sube 1600ms var(--ease-out) both;
+}
+@keyframes humo-sube {
+  from { opacity: 0; transform: translateY(40px) scale(1.04); }
+}
+.hero__brasa {
+  position: absolute;
+  inset: auto -20% -55% -20%;
+  z-index: -1;
+  height: 80%;
+  background: radial-gradient(50% 50% at 50% 50%, rgb(207 63 23 / 0.55), rgb(207 63 23 / 0.12) 45%, transparent 70%);
+  pointer-events: none;
+}
+.hero__contenido {
+  display: grid;
+  justify-items: start;
+  gap: var(--espacio-3);
+  width: 100%;
+  max-width: var(--ancho-max);
+  margin-inline: auto;
+  padding-inline: max(var(--margen), env(safe-area-inset-left)) max(var(--margen), env(safe-area-inset-right));
+}
+.hero__titulo {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--espacio-2);
+  font-stretch: var(--ancho-display);
+  font-size: clamp(2.5rem, 15.5vw, 8.5rem); /* "SMOKE" cabe completo desde 320px */
+  font-weight: 900;
+  line-height: 0.82;
+  letter-spacing: -0.045em;
+  text-transform: uppercase; /* como las letras del logo */
+}
+.hero__ciudad {
+  font-size: 0.42em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-transform: none;
+  color: #c9c7c1;
+}
+.hero__lema { max-width: 28ch; color: #b9b7b1; font-size: var(--texto-l); line-height: 1.3; text-wrap: pretty; }
+.hero__acciones { display: flex; flex-wrap: wrap; gap: var(--espacio-2); margin-top: var(--espacio-3); }
+
+.btn--brasa { background: var(--brasa); border-color: var(--brasa); color: #fff; }
+.btn--vidrio {
+  border-color: rgb(255 255 255 / 0.18);
+  background: rgb(255 255 255 / 0.08);
+  color: #ecebe7;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+.btn--vidrio svg, .btn--brasa svg { width: 18px; height: 18px; }
+
+@media (min-width: 900px) {
+  .hero { padding-bottom: var(--espacio-7); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__humo { animation: humo-aparece 300ms ease both; }
+  @keyframes humo-aparece { from { opacity: 0; } }
+}
+
+/* ============================================================ tipos */
+
+.categorias {
+  display: flex;
+  gap: var(--espacio-2);
+  overflow-x: auto;
+  padding-block: var(--espacio-4) var(--espacio-1);
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.categorias::-webkit-scrollbar { display: none; }
+.categoria {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  flex: none;
+  height: 40px;
+  padding-inline: var(--espacio-4) var(--espacio-3);
+  border: 1px solid var(--borde-fuerte);
+  border-radius: var(--radio-total);
+  background: transparent;
+  font-size: var(--texto-s);
+  font-weight: 600;
+  white-space: nowrap;
+  transition: transform var(--rapido) var(--ease-out), background-color var(--rapido) ease, color var(--rapido) ease;
+}
+.categoria:active { transform: scale(0.96); }
+.categoria[aria-pressed='true'] { background: var(--tinta); border-color: var(--tinta); color: var(--fondo); }
+.categoria__n { color: var(--tinta-2); font-size: var(--texto-xs); font-variant-numeric: tabular-nums; }
+.categoria[aria-pressed='true'] .categoria__n { color: inherit; opacity: 0.7; }
+@media (hover: hover) and (pointer: fine) {
+  .categoria:hover { border-color: var(--tinta); }
+}
+
+/* ============================================================ promos */
+
+.promos { padding-top: var(--espacio-5); }
+.promos[hidden] { display: none; }
+
+/* El sello: etiqueta redonda color brasa, ladeada, como la que se pega en el mostrador. */
+.sello {
+  position: absolute;
+  right: var(--espacio-2);
+  bottom: var(--espacio-2);
+  display: grid;
+  place-content: center;
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: var(--brasa);
+  color: #fff;
+  text-align: center;
+  line-height: 1;
+  rotate: -8deg;
+  box-shadow: 0 6px 14px -6px rgb(120 30 8 / 0.7), inset 0 0 0 2px rgb(255 255 255 / 0.25);
+}
+.sello b { font-stretch: var(--ancho-display); font-size: 1.375rem; font-weight: 900; letter-spacing: -0.03em; }
+.sello span { margin-top: 2px; font-size: 0.6875rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.sello--texto b { font-size: 0.875rem; }
+
+.promo-ficha {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-4);
+  padding: var(--espacio-3) var(--espacio-4) var(--espacio-3) var(--espacio-3);
+  border-radius: var(--radio-m);
+  background: var(--losa);
+  color: #ecebe7;
+}
+.promo-ficha .sello { position: static; flex: none; }
+.promo-ficha__titulo { font-stretch: var(--ancho-display); font-size: var(--texto-m); font-weight: 800; letter-spacing: -0.01em; }
+.promo-ficha__ahorro { color: #b9b7b1; font-size: var(--texto-s); }

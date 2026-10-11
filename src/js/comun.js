@@ -22,6 +22,18 @@ export const textoPrecio = n => (n == null ? 'Precio a consultar' : formatoPreci
 const miles = new Intl.NumberFormat(CONFIG.LOCALE);
 export const textoCaladas = n => (n ? `${miles.format(n)} caladas` : '');
 
+export const textoPromo = promo =>
+  !promo ? '' : promo.cantidad ? `${promo.cantidad} x ${formatoPrecio(promo.total)}` : promo.texto;
+
+// Sello de promo: como la etiqueta que se pega en el mostrador.
+export function selloHTML(promo, clase = 'sello') {
+  if (!promo) return '';
+  const lectura = `<span class="sr">Promo: ${escapeHTML(textoPromo(promo))}</span>`;
+  return promo.cantidad
+    ? `<span class="${clase}" aria-hidden="true"><b>${promo.cantidad}x</b><span>${formatoPrecio(promo.total)}</span></span>${lectura}`
+    : `<span class="${clase} ${clase}--texto" aria-hidden="true"><b>Promo</b></span>${lectura}`;
+}
+
 export const plural = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
 
 export function linkWhatsApp(p, { sabor, nicotina } = {}) {
@@ -29,7 +41,7 @@ export function linkWhatsApp(p, { sabor, nicotina } = {}) {
   const detalle = [sabor, nicotina].filter(Boolean).join(', ');
   const msg = p.stock === 0
     ? `Hola, ¿va a volver el ${p.nombre}? ${url}`
-    : `Hola, me interesa el ${p.nombre}${detalle ? ` (${detalle})` : ''}. ${url}`;
+    : `Hola, me interesa el ${p.nombre}${detalle ? ` (${detalle})` : ''}${p.promo ? ` con la promo ${textoPromo(p.promo)}` : ''}. ${url}`;
   return `https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(msg)}`;
 }
 
@@ -63,13 +75,14 @@ export function tarjetaHTML(p, base, { prioridad = false } = {}) {
     : `<img src="${placeholder}"`;
   const badge = agotado
     ? '<span class="badge">Agotado</span>'
-    : p.nuevo ? '<span class="badge badge--nueva">Nuevo</span>' : '';
+    : p.nuevo && !p.promo ? '<span class="badge badge--nueva">Nuevo</span>' : '';
+  const sello = agotado ? '' : selloHTML(p.promo);
   const aviso = !agotado && p.stock <= 2 ? '<span class="tarjeta__aviso">Últimas unidades</span>' : '';
   const sabores = p.sabores.length > 1 ? plural(p.sabores.length, 'sabor', 'sabores') : p.sabores[0];
   const extra = [textoCaladas(p.caladas), sabores].filter(Boolean).join(', ');
 
   return `<a class="tarjeta${agotado ? ' tarjeta--agotada' : ''}" href="${base}productos/${p.id}/">
-  <span class="tarjeta__media">${img} alt="" width="600" height="600" ${prioridad ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" onerror="this.onerror=null;this.removeAttribute('srcset');this.src='${placeholder}'">${badge}</span>
+  <span class="tarjeta__media">${img} alt="" width="600" height="600" ${prioridad ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" onerror="this.onerror=null;this.removeAttribute('srcset');this.src='${placeholder}'">${badge}${sello}</span>
   ${p.marca ? `<span class="tarjeta__marca">${escapeHTML(p.marca)}</span>` : ''}
   <span class="tarjeta__nombre">${escapeHTML(p.nombre)}</span>
   <span class="tarjeta__precio">${textoPrecio(p.precio)}${aviso}</span>

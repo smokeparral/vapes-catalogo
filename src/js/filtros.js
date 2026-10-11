@@ -4,7 +4,7 @@ import { plano, valorNicotina } from './comun.js';
 const LISTAS = ['cat', 'marca', 'sabor', 'nic'];
 
 export const criteriosVacios = (orden = 'recomendado') =>
-  ({ q: '', cat: [], marca: [], sabor: [], nic: [], min: null, max: null, disp: false, orden });
+  ({ q: '', cat: [], marca: [], sabor: [], nic: [], min: null, max: null, disp: false, promo: false, orden });
 
 export function leerCriterios(params) {
   const lista = k => (params.get(k) ?? '').split(',').map(plano).filter(Boolean);
@@ -18,6 +18,7 @@ export function leerCriterios(params) {
     ...Object.fromEntries(LISTAS.map(k => [k, lista(k)])),
     min: num('min'), max: num('max'),
     disp: params.get('disp') === '1',
+    promo: params.get('promo') === '1',
     orden: params.get('orden') || 'recomendado',
   };
 }
@@ -29,12 +30,13 @@ export function escribirCriterios(c) {
   if (c.min != null) p.set('min', c.min);
   if (c.max != null) p.set('max', c.max);
   if (c.disp) p.set('disp', '1');
+  if (c.promo) p.set('promo', '1');
   if (c.orden !== 'recomendado') p.set('orden', c.orden);
   return p;
 }
 
 export const cuentaFiltros = c =>
-  LISTAS.reduce((n, k) => n + c[k].length, 0) + (c.min != null) + (c.max != null) + c.disp;
+  LISTAS.reduce((n, k) => n + c[k].length, 0) + (c.min != null) + (c.max != null) + c.disp + c.promo;
 
 export const hayFiltros = c => Boolean(c.q.trim()) || cuentaFiltros(c) > 0;
 
@@ -42,6 +44,7 @@ export function filtrar(productos, c) {
   const terminos = plano(c.q).split(' ').filter(Boolean);
   return productos.filter(p => {
     if (c.disp && p.stock === 0) return false;
+    if (c.promo && !p.promo) return false;
     if (terminos.length) {
       const texto = plano([p.nombre, p.categoria, p.marca, ...p.sabores, ...p.nicotina, p.descripcion].join(' '));
       if (!terminos.every(t => texto.includes(t))) return false;

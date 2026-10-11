@@ -8,7 +8,8 @@ import sharp from 'sharp';
 
 import { ADVERTENCIA, CONFIG } from '../src/js/config.js';
 import {
-  escapeHTML, linkWhatsApp, ordenar, plano, plural, slug, tarjetaHTML, textoCaladas, textoPrecio, valorNicotina,
+  escapeHTML, formatoPrecio, linkWhatsApp, ordenar, plano, plural, selloHTML, slug, tarjetaHTML, textoCaladas, textoPrecio,
+  valorNicotina,
 } from '../src/js/comun.js';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -17,7 +18,8 @@ const SALIDA = path.join(RAIZ, '_site');
 const CACHE = path.join(RAIZ, '.cache', 'fotos');
 const URL_SITIO = CONFIG.SITIO_URL.replace(/\/$/, '');
 const BASE = new URL(`${URL_SITIO}/`).pathname;
-const USAR_EJEMPLO = !CONFIG.SHEET_ID.trim();
+// DATOS=ejemplo o DATOS=peor usan datos locales aunque haya hoja (solo para desarrollo).
+const USAR_EJEMPLO = !CONFIG.SHEET_ID.trim() || Boolean(process.env.DATOS);
 const AHORA = new Date();
 const avisos = [];
 
@@ -47,7 +49,7 @@ async function leerFilas() {
   if (USAR_EJEMPLO) {
     // Solo para desarrollo: DATOS=peor npm run dev prueba el diseño con datos extremos.
     const archivo = process.env.DATOS === 'peor' ? 'peor-caso.json' : 'ejemplo.json';
-    console.log(`CONFIG.SHEET_ID está vacío: usando datos/${archivo}`);
+    console.log(`Usando datos locales: datos/${archivo}`);
     return JSON.parse(await readFile(path.join(RAIZ, 'datos', archivo), 'utf8'));
   }
   const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/export?format=csv&gid=${CONFIG.SHEET_GID}`;
@@ -101,6 +103,21 @@ function fuenteFoto(v) {
   return null;
 }
 
+// "2x15000", "2 x $15.000", "3 por 20.000" -> { cantidad, total, ahorro }. Otro texto se muestra tal cual.
+function leerPromo(v, precio, nombre) {
+  const t = texto(v);
+  if (!t) return null;
+  const m = /^(\d+)\s*(?:x|×|por)\s*\$?\s*([\d.,]+)$/i.exec(t);
+  const cantidad = m ? Number(m[1]) : 0;
+  const total = m ? numero(m[2]) : null;
+  if (cantidad < 2 || total == null) return { texto: t };
+  const ahorro = precio != null ? cantidad * precio - total : null;
+  if (ahorro != null && ahorro <= 0) {
+    avisos.push(`"${nombre}": la promo "${t}" no es más barata que ${cantidad} al precio normal.`);
+  }
+  return { cantidad, total, ahorro: ahorro > 0 ? ahorro : null };
+}
+
 const hash = v => createHash('sha256').update(v).digest('hex').slice(0, 16);
 
 function normalizar(filas) {
@@ -150,6 +167,7 @@ function normalizar(filas) {
       caladas: numero(f.caladas),
       sabores: unicos(lista(f.sabores)),
       nicotina: unicos(lista(f.nicotina)).sort((a, b) => valorNicotina(a) - valorNicotina(b)),
+      promo: leerPromo(f.promo, precio, nombre),
       descripcion: String(f.descripcion ?? '').trim(),
       destacado: booleano(f.destacado, false),
       alta,
@@ -249,23 +267,78 @@ const actualizado = new Intl.DateTimeFormat(CONFIG.LOCALE, {
   day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', timeZone: CONFIG.ZONA_HORARIA,
 }).format(AHORA);
 
-const marcaHTML = `<a class="marca" href="${BASE}" aria-label="${escapeHTML(CONFIG.TIENDA)}, inicio">
+const marcaHTML = `<a class="marca vidrio" href="${BASE}" aria-label="${escapeHTML(CONFIG.TIENDA)}, inicio">
         <img class="marca__logo" src="${BASE}img/logo-96.webp" alt="" width="40" height="40">
         <span class="marca__nombre">${escapeHTML(CONFIG.TIENDA)}</span>
       </a>`;
 
-function heroHTML() {
-  const canal = CONFIG.CANAL
-    ? `<a class="btn btn--secundario" href="${escapeHTML(CONFIG.CANAL)}">${ICONOS.canal}Seguir el canal</a>`
-    : '';
+const whatsappHTML = `<a class="flotante flotante--wa" href="https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent('Hola, vengo del catálogo')}" aria-label="Escríbenos por WhatsApp">${ICONOS.chat}</a>`;
+
+// Humo dibujado con ruido fractal: una sola capa estática, sin imágenes que descargar.
+const HUMO = `<svg class="hero__humo" aria-hidden="true" focusable="false" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+        <filter id="humo" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.006 0.016" numOctaves="4" seed="11"/>
+          <feColorMatrix values="0 0 0 0 0.86  0 0 0 0 0.86  0 0 0 0 0.84  0 0 0 1.6 -0.62"/>
+        </filter>
+        <rect width="800" height="600" filter="url(#humo)"/>
+      </svg>`;
+
+function heroHTML(productos) {
+  const hayPromos = productos.some(p => p.promo && p.stock > 0);
+  const acciones = [
+    hayPromos ? `<a class="btn btn--brasa" href="#promos">Ver promos</a>` : '',
+    CONFIG.CANAL ? `<a class="btn btn--vidrio" href="${escapeHTML(CONFIG.CANAL)}">${ICONOS.canal}Seguir el canal</a>` : '',
+  ].filter(Boolean).join('\n          ');
   return `<section class="hero" aria-labelledby="titulo-tienda">
-      <img class="hero__logo" src="${BASE}img/logo-320.webp" alt="" width="160" height="160" fetchpriority="high">
-      <div class="hero__texto">
-        <h1 id="titulo-tienda" class="hero__titulo">${escapeHTML(CONFIG.TIENDA)}</h1>
+      ${HUMO}
+      <div class="hero__brasa" aria-hidden="true"></div>
+      <div class="hero__contenido">
+        <h1 id="titulo-tienda" class="hero__titulo"><span>Smoke</span> <span class="hero__ciudad">Parral</span></h1>
         <p class="hero__lema">${escapeHTML(CONFIG.LEMA)}</p>
-        ${canal}
+        ${acciones ? `<div class="hero__acciones">
+          ${acciones}
+        </div>` : ''}
       </div>
     </section>`;
+}
+
+function categoriasHTML(productos) {
+  const conteo = new Map();
+  for (const p of productos) {
+    const c = conteo.get(plano(p.categoria)) ?? { nombre: p.categoria, n: 0 };
+    c.n++;
+    conteo.set(plano(p.categoria), c);
+  }
+  if (conteo.size < 2) return '';
+  const boton = (clave, nombre, n) =>
+    `<button class="categoria" type="button" data-cat="${escapeHTML(clave)}" aria-pressed="${clave === ''}">${escapeHTML(nombre)}<span class="categoria__n">${n}</span></button>`;
+  return `<nav id="categorias" class="categorias" aria-label="Tipos de producto">
+      ${boton('', 'Todo', productos.length)}
+      ${[...conteo].sort((a, b) => b[1].n - a[1].n).map(([k, c]) => boton(k, c.nombre, c.n)).join('\n      ')}
+    </nav>`;
+}
+
+function promosHTML(productos) {
+  const lista = ordenar(productos.filter(p => p.promo && p.stock > 0), 'recomendado');
+  if (!lista.length) return '';
+  return `<section id="promos" class="promos" aria-labelledby="titulo-promos">
+      <h2 id="titulo-promos" class="seccion__titulo">Promos</h2>
+      <div class="fila-scroll">
+        ${lista.map(p => tarjetaHTML(p, BASE)).join('\n')}
+      </div>
+    </section>`;
+}
+
+function promoFichaHTML(g) {
+  if (!g.promo || g.stock === 0) return '';
+  const detalle = g.promo.cantidad
+    ? `<p class="promo-ficha__titulo">Llévate ${g.promo.cantidad} por ${formatoPrecio(g.promo.total)}</p>
+          ${g.promo.ahorro ? `<p class="promo-ficha__ahorro">Ahorras ${formatoPrecio(g.promo.ahorro)} frente a comprarlos por separado.</p>` : ''}`
+    : `<p class="promo-ficha__titulo">${escapeHTML(g.promo.texto)}</p>`;
+  return `<div class="promo-ficha">
+          ${selloHTML(g.promo, 'sello')}
+          <div>${detalle}</div>
+        </div>`;
 }
 
 function cabezaHTML({ titulo, descripcion, url, imagen, tipo = 'website', extra = '' }) {
@@ -305,7 +378,7 @@ function pieHTML() {
   return `  <footer class="pie">
     <div class="pie__contenido">
       <div>
-        ${marcaHTML}
+        ${marcaHTML.replace('marca vidrio', 'marca')}
         <p>${escapeHTML(CONFIG.LEMA)}</p>
         ${datos}
       </div>
@@ -317,7 +390,8 @@ function pieHTML() {
 }
 
 function destacadosHTML(productos) {
-  const lista = ordenar(productos.filter(g => g.destacado), 'recomendado');
+  // Lo que ya sale en Promos no se repite aquí.
+  const lista = ordenar(productos.filter(g => g.destacado && !(g.promo && g.stock > 0)), 'recomendado');
   if (!lista.length) return '';
   return `<section id="destacados" class="destacados" aria-labelledby="titulo-destacados">
       <h2 id="titulo-destacados" class="seccion__titulo">Destacados</h2>
@@ -402,6 +476,7 @@ function fichaHTML(g, productos) {
           <p class="ficha__precio">${textoPrecio(g.precio)}</p>
           ${estado}
         </div>
+        ${promoFichaHTML(g)}
         ${datosHTML(g)}
         ${opcionesHTML('sabor', 'Sabor', g.sabores)}
         ${opcionesHTML('nicotina', 'Nicotina', g.nicotina)}
@@ -466,7 +541,10 @@ async function generar(productos) {
       url: `${URL_SITIO}/`,
       imagen: ogDefecto,
     }),
-    hero: heroHTML(),
+    whatsapp: whatsappHTML,
+    hero: heroHTML(productos),
+    categorias: categoriasHTML(productos),
+    promos: promosHTML(productos),
     destacados: destacadosHTML(productos),
     total: plural(productos.length, 'producto', 'productos'),
     grilla: ordenadas.map((g, i) => tarjetaHTML(g, BASE, { prioridad: i < 4 })).join('\n'),

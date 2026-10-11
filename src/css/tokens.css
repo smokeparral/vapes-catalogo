@@ -6,7 +6,7 @@
   --superficie: #f2f1ee;
   --foto: #d6d5d0;
   --tinta: #232321;
-  --tinta-2: #6c6b67;
+  --tinta-2: #5f5e5a;
   --borde: #cfcdc8;
   --borde-fuerte: #aeaca6;
   --acento: #232321;
@@ -15,6 +15,10 @@
   --brasa: #cf3f17;
   --exito: #2b7a4b;
   --vidrio: rgb(228 227 223 / 0.8);
+  --vidrio-fondo: rgb(242 241 238 / 0.72);
+  --vidrio-luz: rgb(255 255 255 / 0.7);
+  --vidrio-borde: rgb(35 35 33 / 0.08);
+  --losa: #1f1f1e; /* portada: concreto mojado de noche */
   --sombra-panel: 0 -8px 32px rgb(0 0 0 / 0.12);
 
   --fuente: 'Archivo', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -67,9 +71,13 @@
     --acento: #ecebe7;
     --acento-tinta: #1c1c1b;
     --aviso: #ff8a5c;
-    --brasa: #e8572b;
+    --brasa: #cf3f17;
     --exito: #5cc48a;
     --vidrio: rgb(28 28 27 / 0.8);
+    --vidrio-fondo: rgb(44 44 42 / 0.7);
+    --vidrio-luz: rgb(255 255 255 / 0.12);
+    --vidrio-borde: rgb(255 255 255 / 0.08);
+    --losa: #121211;
     --sombra-panel: 0 -8px 32px rgb(0 0 0 / 0.5);
   }
 }

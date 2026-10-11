@@ -1,4 +1,4 @@
-nombre,categoria,marca,precio,stock,sabores,nicotina,caladas,fotos,descripcion,destacado,visible,id,alta
-Nimbo 6000,Desechable,Nimbo,12990,8,"Sandía Hielo, Mango, Uva",20 mg,6000,,Batería recargable por USB-C.,TRUE,TRUE,,
-Pod Altiplano X,Pod recargable,Altiplano,24990,3,,,,,Batería de 1000 mAh y pods de 2 ml.,FALSE,TRUE,,
-Sales Maqui Berry 30 ml,Líquido,Valle,8990,10,Maqui Berry,"20 mg, 35 mg",,,Sales de nicotina para pods.,FALSE,TRUE,,
+nombre,categoria,marca,precio,stock,sabores,nicotina,caladas,promo,fotos,descripcion,destacado,visible,id,alta
+Nimbo 6000,Desechable,Nimbo,12990,8,"Sandía Hielo, Mango, Uva",20 mg,6000,2x22000,,Batería recargable por USB-C.,TRUE,TRUE,,
+Pod Altiplano X,Pod recargable,Altiplano,24990,3,,,,,,Batería de 1000 mAh y pods de 2 ml.,FALSE,TRUE,,
+Sales Maqui Berry 30 ml,Líquido,Valle,8990,10,Maqui Berry,"20 mg, 35 mg",,,,Sales de nicotina para pods.,FALSE,TRUE,,
