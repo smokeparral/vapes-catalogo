@@ -4,7 +4,7 @@
  *
  * Propiedades del script necesarias (Configuración del proyecto > Propiedades del script):
  *   GITHUB_TOKEN  token de grano fino de GitHub, solo para el repo, permiso "Actions: Read and write"
- *   GITHUB_REPO   usuario/repositorio, p. ej. USUARIO/vapes-catalogo
+ *   GITHUB_REPO   usuario/repositorio, p. ej. smokeparral/vapes-catalogo
  */
 
 const HOJA = 'Productos';

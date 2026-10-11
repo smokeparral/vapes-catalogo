@@ -4,6 +4,8 @@ Catálogo web alojado en GitHub Pages. Los productos se administran desde Google
 y las fotos desde Google Drive; no hace falta tocar este repositorio para agregar,
 cambiar o quitar productos.
 
+**Sitio:** https://smokeparral.github.io/vapes-catalogo/
+
 Al entrar, la web pregunta si la persona es mayor de 18 años (se recuerda en ese navegador)
 y el pie de página muestra la advertencia sanitaria. Ley 21.642: venta solo a mayores de 18.
 
@@ -86,7 +88,7 @@ Crea la carpeta **Fotos catálogo** en Google Drive y compártela como
    Repositorio: solo `vapes-catalogo`. Permiso: **Actions: Read and write**.
 3. En Apps Script: Configuración del proyecto > Propiedades del script:
    - `GITHUB_TOKEN`: el token
-   - `GITHUB_REPO`: `usuario/vapes-catalogo`
+   - `GITHUB_REPO`: `smokeparral/vapes-catalogo`
 4. Recarga la hoja; aparece el menú **Catálogo**. La primera vez pide autorización.
 
 El token vence (GitHub avisa por correo). Si el botón dice que el token venció, genera uno nuevo

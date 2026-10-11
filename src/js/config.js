@@ -3,7 +3,7 @@
 export const CONFIG = {
   TIENDA: 'Smoke Parral',
   LEMA: 'La mejor calidad a bajo precio',
-  SITIO_URL: 'https://maciasdav.github.io/vapes-catalogo', // sin barra final
+  SITIO_URL: 'https://smokeparral.github.io/vapes-catalogo', // sin barra final
 
   // Hoja de Google Sheets. Vacío = se usan los datos de ejemplo de datos/ejemplo.json.
   SHEET_ID: '',
