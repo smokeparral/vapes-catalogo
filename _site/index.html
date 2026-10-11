@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="es" data-base="/vapes-catalogo/">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Smoke Parral · Vapes en Parral</title>
+  <meta name="description" content="La mejor calidad a bajo precio. Pide por WhatsApp.">
+  <link rel="canonical" href="https://smokeparral.github.io/vapes-catalogo/">
+  <meta property="og:site_name" content="Smoke Parral">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Smoke Parral · Vapes en Parral">
+  <meta property="og:description" content="La mejor calidad a bajo precio. Pide por WhatsApp.">
+  <meta property="og:url" content="https://smokeparral.github.io/vapes-catalogo/">
+  <meta property="og:image" content="https://smokeparral.github.io/vapes-catalogo/img/og-default.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="es_CL">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#e4e3df" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1c1c1b" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/vapes-catalogo/img/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/vapes-catalogo/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
+  <link rel="stylesheet" href="/vapes-catalogo/css/tokens.css">
+  <link rel="stylesheet" href="/vapes-catalogo/css/base.css">
+  <link rel="stylesheet" href="/vapes-catalogo/css/components.css">
+
+  <script type="module" src="/vapes-catalogo/js/catalogo.js"></script>
+  <script type="module" src="/vapes-catalogo/js/edad.js"></script>
+</head>
+<body class="con-hero">
+  <a class="saltar" href="#grilla">Saltar al catálogo</a>
+
+  <header class="cabecera">
+    <div class="cabecera__fila">
+      <a class="marca vidrio" href="/vapes-catalogo/" aria-label="Smoke Parral, inicio">
+        <img class="marca__logo" src="/vapes-catalogo/img/logo-96.webp" alt="" width="40" height="40">
+        <span class="marca__nombre">Smoke Parral</span>
+      </a>
+      <form class="busqueda vidrio" role="search">
+        <svg class="busqueda__icono" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4"/></svg>
+        <input id="busqueda" type="search" placeholder="Busca sabor o marca" aria-label="Buscar productos"
+               autocomplete="off" enterkeyhint="search" spellcheck="false">
+      </form>
+      <button id="btn-filtros" class="flotante vidrio" type="button" aria-haspopup="dialog" aria-controls="panel-filtros">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M8.5 15h3"/></svg>
+        <span class="sr">Filtros</span>
+        <span class="btn-filtros__n" hidden></span>
+      </button>
+      <a class="flotante flotante--wa" href="https://wa.me/56900000000?text=Hola%2C%20vengo%20del%20cat%C3%A1logo" aria-label="Escríbenos por WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5z"/><path d="M9 10.5h6M9 13.5h4"/></svg></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="titulo-tienda">
+      <svg class="hero__humo" aria-hidden="true" focusable="false" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+        <filter id="humo" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.006 0.016" numOctaves="4" seed="11"/>
+          <feColorMatrix values="0 0 0 0 0.86  0 0 0 0 0.86  0 0 0 0 0.84  0 0 0 1.6 -0.62"/>
+        </filter>
+        <rect width="800" height="600" filter="url(#humo)"/>
+      </svg>
+      <div class="hero__brasa" aria-hidden="true"></div>
+      <div class="hero__contenido">
+        <h1 id="titulo-tienda" class="hero__titulo"><span>Smoke</span> <span class="hero__ciudad">Parral</span></h1>
+        <p class="hero__lema">La mejor calidad a bajo precio</p>
+        <div class="hero__acciones">
+          <a class="btn btn--vidrio" href="https://whatsapp.com/channel/0029VbD6bUr4tRromUrulA2z"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l5 4V6L7 10H4z"/><path d="M16 9.5a3.5 3.5 0 0 1 0 5M18.5 7a7 7 0 0 1 0 10"/></svg>Seguir el canal</a>
+        </div>
+      </div>
+    </section>
+    
+    
+    <section id="destacados" class="destacados" aria-labelledby="titulo-destacados">
+      <h2 id="titulo-destacados" class="seccion__titulo">Destacados</h2>
+      <div class="fila-scroll">
+        <a class="tarjeta" href="/vapes-catalogo/productos/extre-bar-nicxice-40k/">
+  <span class="tarjeta__media"><img src="/vapes-catalogo/fotos/extre-bar-nicxice-40k-1-600.webp" srcset="/vapes-catalogo/fotos/extre-bar-nicxice-40k-1-600.webp 600w, /vapes-catalogo/fotos/extre-bar-nicxice-40k-1-1200.webp 1200w"
+        sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw" alt="" width="600" height="600" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute('srcset');this.src='/vapes-catalogo/img/placeholder.svg'"></span>
+  <span class="tarjeta__marca">Extre Bar</span>
+  <span class="tarjeta__nombre">Extre Bar NICxICE 40K</span>
+  <span class="tarjeta__precio">$21.990</span>
+  <span class="tarjeta__extra">40.000 hits</span>
+</a>
+<a class="tarjeta" href="/vapes-catalogo/productos/luffbar-doris-30k/">
+  <span class="tarjeta__media"><img src="/vapes-catalogo/fotos/luffbar-doris-30k-1-600.webp" srcset="/vapes-catalogo/fotos/luffbar-doris-30k-1-600.webp 600w, /vapes-catalogo/fotos/luffbar-doris-30k-1-1200.webp 1200w"
+        sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw" alt="" width="600" height="600" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute('srcset');this.src='/vapes-catalogo/img/placeholder.svg'"></span>
+  <span class="tarjeta__marca">Luffbar</span>
+  <span class="tarjeta__nombre">Luffbar Doris 30K</span>
+  <span class="tarjeta__precio">$17.990<span class="tarjeta__aviso">Últimas unidades</span></span>
+  <span class="tarjeta__extra">30.000 hits</span>
+</a>
+      </div>
+    </section>
+
+    <div class="catalogo">
+      <dialog id="panel-filtros" class="panel" aria-labelledby="titulo-filtros">
+        <div class="panel__cabecera">
+          <span class="panel__asa" aria-hidden="true"></span>
+          <h2 id="titulo-filtros" class="panel__titulo">Filtros</h2>
+          <button id="cerrar-filtros" class="panel__cerrar" type="button" aria-label="Cerrar filtros">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+          </button>
+        </div>
+        <form id="form-filtros" class="panel__cuerpo"></form>
+        <div class="panel__pie">
+          <button id="limpiar" class="btn btn--secundario" type="button">Limpiar</button>
+          <button id="ver-resultados" class="btn" type="button">Ver productos</button>
+        </div>
+      </dialog>
+
+      <section class="resultados" aria-labelledby="titulo-catalogo">
+        <h2 id="titulo-catalogo" class="sr">Catálogo</h2>
+        <div class="barra">
+          <p id="contador" class="barra__contador" aria-live="polite">5 productos</p>
+          <label class="orden">
+            <span class="sr">Ordenar por</span>
+            <select id="orden">
+              <option value="recomendado">Recomendados</option>
+              <option value="recientes">Más recientes</option>
+              <option value="precio-asc">Precio: menor a mayor</option>
+              <option value="precio-desc">Precio: mayor a menor</option>
+            </select>
+          </label>
+        </div>
+        <div id="chips" class="chips" hidden></div>
+        <div id="grilla" class="grilla">
+<a class="tarjeta" href="/vapes-catalogo/productos/death-row-vapes-5000/">
+  <span class="tarjeta__media"><img src="/vapes-catalogo/fotos/death-row-vapes-5000-1-600.webp" srcset="/vapes-catalogo/fotos/death-row-vapes-5000-1-600.webp 600w, /vapes-catalogo/fotos/death-row-vapes-5000-1-1200.webp 1200w"
+        sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw" alt="" width="600" height="600" fetchpriority="high" decoding="async" onerror="this.onerror=null;this.removeAttribute('srcset');this.src='/vapes-catalogo/img/placeholder.svg'"></span>
+  <span class="tarjeta__marca">Death Row</span>
+  <span class="tarjeta__nombre">Death Row Vapes 5000</span>
+  <span class="tarjeta__precio">$8.990</span>
+  <span class="tarjeta__extra">5.000 hits, Durazno Uva</span>
+</a>
+<a class="tarjeta" href="/vapes-catalogo/productos/extre-bar-nicxice-40k/">
+  <span class="tarjeta__media"><img src="/vapes-catalogo/fotos/extre-bar-nicxice-40k-1-600.webp" srcset="/vapes-catalogo/fotos/extre-bar-nicxice-40k-1-600.webp 600w, /vapes-catalogo/fotos/extre-bar-nicxice-40k-1-1200.webp 1200w"
+        sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw" alt="" width="600" height="600" fetchpriority="high" decoding="async" onerror="this.onerror=null;this.removeAttribute('srcset');this.src='/vapes-catalogo/img/placeholder.svg'"></span>
+  <span class="tarjeta__marca">Extre Bar</span>
+  <span class="tarjeta__nombre">Extre Bar NICxICE 40K</span>
+  <span class="tarjeta__precio">$21.990</span>
+  <span class="tarjeta__extra">40.000 hits</span>
+</a>
+<a class="tarjeta" href="/vapes-catalogo/productos/iplay-box-4000/">
+  <span class="tarjeta__media"><img src="/vapes-catalogo/fotos/iplay-box-4000-1-600.webp" srcset="/vapes-catalogo/fotos/iplay-box-4000-1-600.webp 600w, /vapes-catalogo/fotos/iplay-box-4000-1-1200.webp 1200w"
+        sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw" alt="" width="600" height="600" fetchpriority="high" decoding="async" onerror="this.onerror=null;this.removeAttribute('srcset');this.src='/vapes-catalogo/img/placeholder.svg'"></span>
+  <span class="tarjeta__marca">iPlay</span>
+  <span class="tarjeta__nombre">iPlay Box 4000</span>
+  <span class="tarjeta__precio">$7.990</span>
+  <span class="tarjeta__extra">4.000 hits</span>
+</a>
+<a class="tarjeta" href="/vapes-catalogo/productos/luffbar-doris-30k/">
+  <span class="tarjeta__media"><img src="/vapes-catalogo/fotos/luffbar-doris-30k-1-600.webp" srcset="/vapes-catalogo/fotos/luffbar-doris-30k-1-600.webp 600w, /vapes-catalogo/fotos/luffbar-doris-30k-1-1200.webp 1200w"
+        sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw" alt="" width="600" height="600" fetchpriority="high" decoding="async" onerror="this.onerror=null;this.removeAttribute('srcset');this.src='/vapes-catalogo/img/placeholder.svg'"></span>
+  <span class="tarjeta__marca">Luffbar</span>
+  <span class="tarjeta__nombre">Luffbar Doris 30K</span>
+  <span class="tarjeta__precio">$17.990<span class="tarjeta__aviso">Últimas unidades</span></span>
+  <span class="tarjeta__extra">30.000 hits</span>
+</a>
+<a class="tarjeta" href="/vapes-catalogo/productos/tyson-2-0-heavyweight-7000/">
+  <span class="tarjeta__media"><img src="/vapes-catalogo/fotos/tyson-2-0-heavyweight-7000-1-600.webp" srcset="/vapes-catalogo/fotos/tyson-2-0-heavyweight-7000-1-600.webp 600w, /vapes-catalogo/fotos/tyson-2-0-heavyweight-7000-1-1200.webp 1200w"
+        sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw" alt="" width="600" height="600" loading="lazy" decoding="async" onerror="this.onerror=null;this.removeAttribute('srcset');this.src='/vapes-catalogo/img/placeholder.svg'"></span>
+  <span class="tarjeta__marca">Tyson 2.0</span>
+  <span class="tarjeta__nombre">Tyson 2.0 Heavyweight 7000</span>
+  <span class="tarjeta__precio">$10.990</span>
+  <span class="tarjeta__extra">7.000 hits</span>
+</a>
+        </div>
+        <div id="vacio" class="vacio" hidden>
+          <p class="vacio__titulo">No hay productos con esos filtros</p>
+          <button id="limpiar-vacio" class="btn btn--secundario" type="button">Limpiar filtros</button>
+        </div>
+        <button id="ver-mas" class="btn btn--secundario ver-mas" type="button" hidden>Ver más</button>
+      </section>
+    </div>
+  </main>
+
+  <footer class="pie">
+    <div class="pie__contenido">
+      <div>
+        <a class="marca" href="/vapes-catalogo/" aria-label="Smoke Parral, inicio">
+        <img class="marca__logo" src="/vapes-catalogo/img/logo-96.webp" alt="" width="40" height="40">
+        <span class="marca__nombre">Smoke Parral</span>
+      </a>
+        <p>La mejor calidad a bajo precio</p>
+        <p>Entregas en Parral. Pedimos carnet al entregar.</p>
+      </div>
+      <nav class="pie__enlaces" aria-label="Contacto"><a href="https://wa.me/526271152738">WhatsApp +526271152738</a><a href="https://whatsapp.com/channel/0029VbD6bUr4tRromUrulA2z">Canal de WhatsApp</a></nav>
+    </div>
+  </footer>
+</body>
+</html>

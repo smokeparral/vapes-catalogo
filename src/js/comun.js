@@ -20,7 +20,7 @@ export const formatoPrecio = n => (Number.isInteger(n) ? enteros : decimales).fo
 export const textoPrecio = n => (n == null ? 'Precio a consultar' : formatoPrecio(n));
 
 const miles = new Intl.NumberFormat(CONFIG.LOCALE);
-export const textoCaladas = n => (n ? `${miles.format(n)} caladas` : '');
+export const textoHits = n => (n ? `${miles.format(n)} hits` : '');
 
 export const textoPromo = promo =>
   !promo ? '' : promo.cantidad ? `${promo.cantidad} x ${formatoPrecio(promo.total)}` : promo.texto;
@@ -79,7 +79,7 @@ export function tarjetaHTML(p, base, { prioridad = false } = {}) {
   const sello = agotado ? '' : selloHTML(p.promo);
   const aviso = !agotado && p.stock <= 2 ? '<span class="tarjeta__aviso">Últimas unidades</span>' : '';
   const sabores = p.sabores.length > 1 ? plural(p.sabores.length, 'sabor', 'sabores') : p.sabores[0];
-  const extra = [textoCaladas(p.caladas), sabores].filter(Boolean).join(', ');
+  const extra = [textoHits(p.hits), sabores].filter(Boolean).join(', ');
 
   return `<a class="tarjeta${agotado ? ' tarjeta--agotada' : ''}" href="${base}productos/${p.id}/">
   <span class="tarjeta__media">${img} alt="" width="600" height="600" ${prioridad ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" onerror="this.onerror=null;this.removeAttribute('srcset');this.src='${placeholder}'">${badge}${sello}</span>

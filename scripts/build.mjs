@@ -7,9 +7,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 
-import { ADVERTENCIA, CONFIG } from '../src/js/config.js';
+import { CONFIG } from '../src/js/config.js';
 import {
-  escapeHTML, formatoPrecio, linkWhatsApp, ordenar, plano, plural, selloHTML, slug, tarjetaHTML, textoCaladas, textoPrecio,
+  escapeHTML, formatoPrecio, linkWhatsApp, ordenar, plano, plural, selloHTML, slug, tarjetaHTML, textoHits, textoPrecio,
   valorNicotina,
 } from '../src/js/comun.js';
 
@@ -168,7 +168,7 @@ function normalizar(filas) {
       precio,
       stock,
       marca: texto(f.marca),
-      caladas: numero(f.caladas),
+      hits: numero(f.hits ?? f.caladas), // la columna puede llamarse "hits" o "caladas"
       sabores: unicos(lista(f.sabores)),
       nicotina: unicos(lista(f.nicotina)).sort((a, b) => valorNicotina(a) - valorNicotina(b)),
       promo: leerPromo(f.promo, precio, nombre),
@@ -387,7 +387,6 @@ function pieHTML() {
         ${datos}
       </div>
       <nav class="pie__enlaces" aria-label="Contacto">${enlaces.join('')}</nav>
-      <p class="pie__advertencia">${escapeHTML(ADVERTENCIA)}</p>
       <p class="pie__nota">El stock es informativo; confirmamos disponibilidad por WhatsApp.<br>Actualizado el ${actualizado}.</p>
     </div>
   </footer>`;
@@ -421,7 +420,7 @@ function opcionesHTML(nombre, titulo, valores) {
 
 // Datos fijos del producto como lista, no como "A · B · C".
 function datosHTML(g) {
-  const filas = [['Marca', g.marca], ['Duración', textoCaladas(g.caladas)]].filter(([, v]) => v);
+  const filas = [['Marca', g.marca], ['Duración', textoHits(g.hits)]].filter(([, v]) => v);
   if (!filas.length) return '';
   return `<dl class="ficha__datos">
           ${filas.map(([k, v]) => `<div><dt>${k}</dt><dd>${escapeHTML(v)}</dd></div>`).join('\n          ')}

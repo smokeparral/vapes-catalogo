@@ -1,5 +1,5 @@
 // Aviso de mayoría de edad (Ley 21.642). Se recuerda en este navegador.
-import { ADVERTENCIA, CONFIG } from './config.js';
+import { CONFIG } from './config.js';
 import { escapeHTML } from './comun.js';
 
 const CLAVE = 'mayor-de-edad';
@@ -15,7 +15,6 @@ if (!confirmado()) {
   aviso.innerHTML = `
     <img class="edad__logo" src="${document.documentElement.dataset.base}img/logo-320.webp" alt="${escapeHTML(CONFIG.TIENDA)}" width="112" height="112">
     <h2 id="edad-titulo" class="edad__titulo">¿Tienes 18 años o más?</h2>
-    <p class="edad__texto">${escapeHTML(ADVERTENCIA)}</p>
     <div class="edad__botones">
       <button class="btn" type="button" data-si>Sí, soy mayor de edad</button>
       <button class="btn btn--secundario" type="button" data-no>No</button>

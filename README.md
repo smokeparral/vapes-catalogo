@@ -17,7 +17,7 @@ Todo se hace desde la hoja de Google Sheets (también funciona en la app del cel
 
 ### Agregar un producto
 1. Sube las fotos a la carpeta **Fotos catálogo** de Google Drive.
-2. En la hoja, llena una fila nueva: `nombre`, `categoria`, `marca`, `precio`, `stock`, `sabores`, `nicotina`, `caladas`.
+2. En la hoja, llena una fila nueva: `nombre`, `categoria`, `marca`, `precio`, `stock`, `sabores`, `nicotina`, `hits`.
 3. En `fotos`, pega el link de cada foto (en Drive: ⋮ > Compartir > Copiar vínculo).
    Separa varios links con coma o un salto de línea (Alt + Enter). El primero es la foto principal.
 4. Menú **Catálogo > Publicar cambios**. En unos 2 minutos está en línea.
@@ -56,7 +56,7 @@ Si quieres cambiar una foto, sube una nueva a Drive y pega su link (no reemplace
 | `stock` | Unidades disponibles. `0` = agotado |
 | `sabores` | Separados por coma: `Sandía Hielo, Mango, Uva`. Vacío si no aplica |
 | `nicotina` | `20 mg` o `Sin nicotina, 3 mg, 6 mg`. Vacío si no aplica |
-| `caladas` | Solo el número: `6000`. Vacío si no aplica |
+| `hits` | Solo el número: `6000`. Vacío si no aplica. También funciona si la columna se llama `caladas` |
 | `promo` | Opcional. `2x22000` o `3 por 25.000` (cantidad x precio total de la promo), o un texto libre como `Pod de regalo`. Vacío = sin promo |
 | `fotos` | Links de Google Drive |
 | `descripcion` | Opcional |
